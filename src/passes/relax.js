@@ -1,4 +1,4 @@
-define(['utils', 'target/parser/pegjs.js'], function (utils, pegjs) {
+define(['utils', 'parser/pegjs'], function (utils, pegjs) {
   return function (ast, options) {
 
     var added = [];
@@ -17,7 +17,7 @@ define(['utils', 'target/parser/pegjs.js'], function (utils, pegjs) {
           {type: "sequence",
             elements: [
               {type: "semantic_not",
-                code: "return $pegace.lax"},
+                code: "return $pegace.lax || false"},
               {type: "rule_ref",
                 name: name}
             ]
@@ -35,6 +35,9 @@ define(['utils', 'target/parser/pegjs.js'], function (utils, pegjs) {
           );
         }
       });
+      ast.initializer = {
+        type: "initializer", code: "$pegace = options.$pegace;console.log($pegace);"
+      };
     }
     return ast ;
   }

@@ -1,12 +1,15 @@
 define(['pegace'], function (pegace) {
   describe("Pegace project", function() {
     it("should handle parser grammar", function() {
-      expect(pegace.build({
+      var eparser = pegace.build({
         grammar: "rule = command+; command = (a / b) ';'; a = 'aa'; b = 'bb'",
-        relax: {
-          command: "[^;]+ ';'"  // skip any unknown command
+        pegace: {
+          relax: {
+            command: "[^;]+ ';'"  // skip any unknown command
+          }
         }
-      })).not.toEqual(undefined);
+      });
+      expect(eparser.verify("aa;")).not.toEqual(undefined);
     });
   });
 });

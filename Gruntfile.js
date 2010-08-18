@@ -93,11 +93,11 @@ module.exports = function (grunt) {
               paths: {
                 text: '../lib/requirejs-text/text',
                 ace: '../lib/ace',
-                pegjs: '../lib/pegjs/peg-0.8.0.min',
+                PEG: '../lib/pegjs/peg-0.8.0',
                 spec: '../spec'
               },
               shim: {
-                pegjs: {
+                PEG: {
                   exports: "PEG"
                 }
               }

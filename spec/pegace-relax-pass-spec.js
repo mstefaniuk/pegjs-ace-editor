@@ -1,4 +1,4 @@
-define(['passes/relax', 'target/parser/pegjs.js', 'utils'], function (relax, pegjs, utils) {
+define(['passes/relax', 'parser/pegjs', 'utils'], function (relax, pegjs, utils) {
 
   var grammar = [
     "start = sentence+",
@@ -15,8 +15,9 @@ define(['passes/relax', 'target/parser/pegjs.js', 'utils'], function (relax, peg
     it("should modify AST according to provided rules", function () {
       var east = pegjs.parse(grammar);
       var ast = pegjs.parse([
+        "{$pegace = options.$pegace;console.log($pegace);}",
         "start = sentence+",
-        "sentence = prone [;] / !{return $pegace.lax} _lax_sentence",
+        "sentence = prone [;] / !{return $pegace.lax || false} _lax_sentence",
         "prone = [a-z]+",
         "_lax_sentence = string:$[^;]* [;] {$pegace.error(string)}"].join("\n"));
       relax(east, {pegace: {relax: {sentence: "string:$[^;]* [;]"}}});

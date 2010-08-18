@@ -1,4 +1,4 @@
-define(['pegjs', 'text!../../src/grammar/pegjs.pegjs', 'spec/ast/pegjs'],
+define(['PEG', 'text!../../src/grammar/pegjs.pegjs', 'spec/ast/pegjs'],
   function(PEG, source, vanilla){
 
   beforeEach(function() {

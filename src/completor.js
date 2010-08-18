@@ -1,4 +1,4 @@
-define(['pegjs'], function(pegjs){
+define(['parser/pegjs'], function(pegjs){
   return {
     check: function(source) {
       var result;
