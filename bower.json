@@ -1,0 +1,27 @@
+{
+  "name": "pegjs-ace-editor",
+  "version": "0.0.0",
+  "dependencies": {
+    "requirejs": "*",
+    "ace": "*"
+  },
+  "exportsOverride": {
+    "requirejs": {
+      "": "require.js"
+    },
+    "ace": {
+      "": "lib/ace"
+    }
+  },
+  "authors": [
+    "Marcin Stefaniuk <marcin@stefaniuk.info>"
+  ],
+  "license": "LGPL",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "spec"
+  ]
+}
