@@ -51,7 +51,7 @@ module.exports = function (grunt) {
     },
     watch: {
       page: {
-        files: ['src/**','spec/**'],
+        files: ['src/**', 'spec/**'],
         tasks: ['build', 'check']
       },
       options: {
@@ -78,7 +78,6 @@ module.exports = function (grunt) {
         options: {
           specs: 'spec/*-spec.js',
           helpers: 'spec/*-helper.js',
-          styles: 'spec/*-helper.css',
           host: 'http://127.0.0.1:9999/',
           keepRunner: true,
           template: require('grunt-template-jasmine-requirejs'),
@@ -86,6 +85,7 @@ module.exports = function (grunt) {
             requireConfig: {
               baseUrl: "target",
               paths: {
+                text: '../lib/requirejs-text/text',
                 ace: '../lib/ace',
                 spec: '../spec'
               }

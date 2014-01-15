@@ -3,11 +3,15 @@
   "version": "0.0.0",
   "dependencies": {
     "requirejs": "*",
+    "requirejs-text": "*",
     "ace": "*"
   },
   "exportsOverride": {
     "requirejs": {
       "": "require.js"
+    },
+    "requirejs-text": {
+      "": "text.js"
     },
     "ace": {
       "": "lib/ace"
