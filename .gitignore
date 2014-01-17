@@ -6,6 +6,8 @@ lib-cov
 *.out
 *.pid
 *.gz
+.idea
+.grunt
 
 pids
 logs
@@ -13,6 +15,8 @@ results
 
 npm-debug.log
 node_modules
-lib
+lib/ace
+lib/requirejs
+lib/requirejs-text
 target
 _SpecRunner.html

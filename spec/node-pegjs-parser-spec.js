@@ -1,14 +1,15 @@
-define(['target/parser/pegjs.js', 'text!../../src/grammar/pegjs.pegjs', 'spec/ast/vanilla'], function(pegjs, source, vanilla){
+define(['target/parser/pegjs.js', 'text!../../src/grammar/pegjs.pegjs', 'spec/ast/vanilla'],
+  function(pegjs, source, vanilla){
 
   beforeEach(function() {
     this.addMatchers(objectDiff.jasmine);
   });
 
-  describe("Parser for editor", function() {
+  describe("Node generated PEG.js parser", function() {
     it("should parse itself without error", function(){
       expect(function(){pegjs.parse(source)}).not.toThrow();
     });
-    it("should return ast", function() {
+    it("generated parser should parse PEG.js grammar to the same AST", function() {
       var ast = pegjs.parse(source);
       expect(ast).toEqualProperties(vanilla);
     });

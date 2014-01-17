@@ -1,5 +1,18 @@
 var objectDiff = typeof exports != 'undefined' ? exports : {};
 
+var stringify = JSON.stringify;
+JSON.stringify = function(obj) {
+  var seen = [];
+
+  return stringify(obj, function(key, val) {
+    if (typeof val === "object") {
+      if (seen.indexOf(val) >= 0) { return; }
+      seen.push(val);
+    }
+    return val;
+  });
+};
+
 /**
  * @param {Object} a
  * @param {Object} b
@@ -215,17 +228,9 @@ objectDiff.diffOwnProperties = function diffOwnProperties(a, b) {
    * @return {string}
    */
   function stringifyObjectKey(key) {
-    var seen = [];
     return /^[a-z0-9_$]*$/i.test(key) ?
       key :
-      JSON.stringify(key, function(key, val) {
-        if (typeof val == "object") {
-          if (seen.indexOf(val) >= 0)
-            return
-          seen.push(val)
-        }
-        return val
-      });
+      JSON.stringify(key);
   }
 
   /**
@@ -251,7 +256,6 @@ objectDiff.diffOwnProperties = function diffOwnProperties(a, b) {
      * @return {string}
      */
     function _inspect(accumulator, obj) {
-      var seen = [];
       switch(typeof obj) {
         case 'object':
           if (!obj) {
@@ -276,14 +280,7 @@ objectDiff.diffOwnProperties = function diffOwnProperties(a, b) {
           break;
 
         case 'string':
-          accumulator += JSON.stringify(escapeHTML(obj), function(key, val) {
-            if (typeof val == "object") {
-              if (seen.indexOf(val) >= 0)
-                return
-              seen.push(val)
-            }
-            return val
-          });
+          accumulator += JSON.stringify(escapeHTML(obj));
           break;
 
         case 'undefined':
