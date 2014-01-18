@@ -25,11 +25,16 @@ module.exports = function (grunt) {
       bower: ["lib"]
     },
     peg: {
-      options: {exportVar: "parser"},
+      options: {exportVar: "parser", allowedStartRules: ['grammar','expression']},
       pegjs: {
         src: "src/grammar/pegjs.pegjs",
         dest: "target/parser/pegjs.js"
       }
+//      ,
+//      expression: {
+//        src: "src/grammar/expression.pegjs",
+//        dest: "target/parser/expression.js"
+//      }
     },
     file_append: {
       default_options: {
@@ -43,10 +48,10 @@ module.exports = function (grunt) {
     },
     copy: {
       src: {
-        src: ['src/*.js'],
+        cwd: 'src',
+        src: ['**/*.js'],
         dest: 'target/',
-        expand: true,
-        flatten: true
+        expand: true
       }
     },
     watch: {
