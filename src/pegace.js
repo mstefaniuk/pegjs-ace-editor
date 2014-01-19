@@ -22,10 +22,10 @@ define(['PEG', 'passes/relax'], function (PEG, relax) {
           var errors = [];
           try {
             parser.parse(source, {
-              $pegace: {
+              $ace: {
                 lax: true,
-                error: function(string) {
-                  var error = {pos: offset()+text.indexOf(string), type: "test", string: string};
+                error: function(offset, text, string) {
+                  var error = {pos: offset+text.indexOf(string), type: "test", string: string};
                   console.log(error);
                   errors.push(error);
                 }

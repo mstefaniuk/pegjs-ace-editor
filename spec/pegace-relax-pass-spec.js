@@ -15,11 +15,11 @@ define(['passes/relax', 'parser/pegjs', 'utils'], function (relax, pegjs, utils)
     it("should modify AST according to provided rules", function () {
       var east = pegjs.parse(grammar);
       var ast = pegjs.parse([
-        "{$pegace = options.$pegace;console.log($pegace);}",
+        "{var $ace = {lax:options.$ace.lax,error:function(s){options.$ace.error(offset(),text,s)}};}",
         "start = sentence+",
-        "sentence = prone [;] / !{return $pegace.lax || false} _lax_sentence",
+        "sentence = prone [;] / &{return $ace.lax} _lax_sentence",
         "prone = [a-z]+",
-        "_lax_sentence = string:$[^;]* [;] {$pegace.error(string)}"].join("\n"));
+        "_lax_sentence = string:$[^;]* [;] {$ace.error(string)}"].join("\n"));
       relax(east, {pegace: {relax: {sentence: "string:$[^;]* [;]"}}});
       expect(east).toEqualProperties(ast);
     });

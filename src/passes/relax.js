@@ -6,7 +6,7 @@ define(['utils', 'parser/pegjs'], function (utils, pegjs) {
     function relax(node, relaxed) {
       // compile relaxing
       var name = "_lax_" + node.name;
-      var lax = pegjs.parse(name + "=" + relaxed + " {$pegace.error(string)}", {startRule: "rule"});
+      var lax = pegjs.parse(name + "=" + relaxed + " {$ace.error(string)}", {startRule: "rule"});
 
       // handle relaxed alternative
       var expression = utils.clone(node.expression);
@@ -16,8 +16,8 @@ define(['utils', 'parser/pegjs'], function (utils, pegjs) {
           expression,
           {type: "sequence",
             elements: [
-              {type: "semantic_not",
-                code: "return $pegace.lax || false"},
+              {type: "semantic_and",
+                code: "return $ace.lax"},
               {type: "rule_ref",
                 name: name}
             ]
@@ -36,7 +36,7 @@ define(['utils', 'parser/pegjs'], function (utils, pegjs) {
         }
       });
       ast.initializer = {
-        type: "initializer", code: "$pegace = options.$pegace;console.log($pegace);"
+        type: "initializer", code: "var $ace = {lax:options.$ace.lax,error:function(s){options.$ace.error(offset(),text,s)}};"
       };
     }
     return ast ;

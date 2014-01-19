@@ -5,11 +5,11 @@ define(['pegace'], function (pegace) {
         grammar: "rule = command+; command = (a / b) ';'; a = 'aa'; b = 'bb'",
         pegace: {
           relax: {
-            command: "[^;]+ ';'"  // skip any unknown command
+            command: "string:$[^;]* [;]"  // skip any unknown command
           }
         }
       });
-      expect(eparser.verify("aa;")).not.toEqual(undefined);
+      expect(eparser.verify("aa;w;")).not.toEqual(undefined);
     });
   });
 });
