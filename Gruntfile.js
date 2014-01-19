@@ -25,7 +25,7 @@ module.exports = function (grunt) {
       bower: ["lib"]
     },
     peg: {
-      options: {exportVar: "parser", allowedStartRules: ['grammar','expression']},
+      options: {exportVar: "parser", allowedStartRules: ['grammar','rule','expression']},
       pegjs: {
         src: "src/grammar/pegjs.pegjs",
         dest: "target/parser/pegjs.js"
