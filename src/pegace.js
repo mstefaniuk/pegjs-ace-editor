@@ -12,7 +12,7 @@ define(['PEG', 'passes/relax'], function (PEG, relax) {
         project.grammar, {
           output: 'parser',
           plugins: [plugin],
-          pegace: project.pegace
+          pegace: project.options
         });
       return {
         parse: function (source) {
@@ -22,14 +22,7 @@ define(['PEG', 'passes/relax'], function (PEG, relax) {
           var errors = [];
           try {
             parser.parse(source, {
-              $ace: {
-                lax: true,
-                error: function(offset, text, string) {
-                  var error = {pos: offset+text.indexOf(string), type: "test", string: string};
-                  console.log(error);
-                  errors.push(error);
-                }
-              }
+              lax: true
             });
             return errors;
           } catch (e) {
