@@ -6,37 +6,31 @@ define(['PEG', 'passes/relax','utils'], function (PEG, relax, utils) {
     }
   };
 
-  function nop() {}
-  function intoExpression(node) { gatherErrors(node.expression); }
-  function intoSubnodes(propertyName) {
-    return function(node) { utils.each(node[propertyName], gatherErrors); };
-  }
-
-  var errors;
-  var gatherErrors = utils.buildNodeVisitor({
-    grammar: intoSubnodes("rules"),
-    rule: intoExpression,
-    named: intoExpression,
-    choice: intoSubnodes("alternatives"),
-    action: intoExpression,
-    sequence: intoSubnodes("elements"),
-    labeled: intoExpression,
-    text: intoExpression,
-    simple_and: intoExpression,
-    simple_not: intoExpression,
-    semantic_and: nop,
-    semantic_not: nop,
-    optional: intoExpression,
-    zero_or_more: intoExpression,
-    one_or_more: intoExpression,
-    rule_ref: nop,
-    literal: nop,
-    "class": nop,
-    any: nop,
-    error: function(node) {
-      errors.push(node);
+  function makeVisitor(structure, visiting) {
+    function factory(definition) {
+      if (definition.length==0) {
+        return visiting;
+      } else {
+        return function(node) {
+          visiting(node);
+          definition.forEach(function(d){
+            if (Array.isArray(node[d])) {
+              node[d].forEach(visitor);
+            } else {
+              visitor(node[d]);
+            }
+          });
+        }
+      }
     }
-  });
+    var functions = {};
+    Object.keys(structure).map(function(e){
+      functions[e] = factory(structure[e]);
+    });
+    functions['error'] = factory([]);
+    var visitor = utils.buildNodeVisitor(functions);
+    return visitor;
+  }
 
   return {
     build: function (project) {
@@ -46,20 +40,39 @@ define(['PEG', 'passes/relax','utils'], function (PEG, relax, utils) {
           plugins: [plugin],
           pegace: project.options
         });
+
+      function filterErrors(ast) {
+        var errors = [];
+        var filter = makeVisitor(project.structure, function(node){
+          if (node.type == 'error') {
+            errors.push(node);
+          }
+        });
+        filter(ast);
+        return errors;
+      }
+
       return {
         parse: function (source) {
           parser.parse(source);
         },
-        verify: function(source) {
-          errors = [];
+        verify: function(source, nodes) {
           try {
             var ast  = parser.parse(source, {
               lax: true
             });
-            gatherErrors(ast);
-            return errors;
+            return filterErrors(ast);
           } catch (e) {
             console.log(e);
+          }
+        },
+        suggest: function(source, cursor) {
+          try {
+            parser.parse(source.substr(0,cursor));
+          } catch (e) {
+            if (e.offset==source.length) {
+              var complete = this.verify(source, ['rule']);
+            }
           }
         }
       };

@@ -21,6 +21,30 @@ define(['pegace', 'text!../../src/grammar/pegjs.pegjs'], function (pegace, pegra
       beforeEach(function() {
         epeg = pegace.build({
           grammar: pegrammar,
+          structure: {
+            grammar: ['rules'],
+            rule: ['expression'],
+            named: ['expression'],
+            choice: ["alternatives"],
+            action: ['expression'],
+            sequence: ["elements"],
+            labeled: ['expression'],
+            text: ['expression'],
+            simple_and: ['expression'],
+            simple_not: ['expression'],
+            semantic_and: [],
+            semantic_not: [],
+            optional: ['expression'],
+            zero_or_more: ['expression'],
+            one_or_more: ['expression'],
+            rule_ref: [],
+            literal: [],
+            "class": [],
+            any: []
+          },
+          complete: {
+            rule_ref: ["rule"]
+          },
           options: {
             relax: {
               rule: "(!(identifier string? equals) .)+"
