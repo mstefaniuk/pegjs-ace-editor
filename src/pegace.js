@@ -41,37 +41,49 @@ define(['PEG', 'passes/relax','utils'], function (PEG, relax, utils) {
           pegace: project.options
         });
 
-      function filterErrors(ast) {
-        var errors = [];
+      function filterNodes(ast, nodes) {
+        var result = [];
         var filter = makeVisitor(project.structure, function(node){
-          if (node.type == 'error') {
-            errors.push(node);
+          if (nodes.indexOf(node.type) > -1) {
+            result.push(node);
           }
         });
         filter(ast);
-        return errors;
+        return result;
       }
 
       return {
         parse: function (source) {
           parser.parse(source);
         },
-        verify: function(source, nodes) {
+        verify: function(source) {
           try {
             var ast  = parser.parse(source, {
               lax: true
             });
-            return filterErrors(ast);
+            return filterNodes(ast,['error']);
           } catch (e) {
             console.log(e);
           }
         },
         suggest: function(source, cursor) {
           try {
-            parser.parse(source.substr(0,cursor));
+            parser.parse(source.substr(0, cursor) + '%');
           } catch (e) {
-            if (e.offset==source.length) {
-              var complete = this.verify(source, ['rule']);
+            if (e.offset == cursor) {
+              var ast = parser.parse(source, {
+                lax: true
+              });
+              var completions = [];
+              e.expected.forEach(function(ex) {
+                if (project.complete[ex.description]) {
+                  Array.prototype.push.apply(completions,
+                    filterNodes(ast, project.complete[ex.description]));
+                }
+              });
+              return completions.map(function(k){
+                return k.name
+              });
             }
           }
         }
