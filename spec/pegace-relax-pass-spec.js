@@ -16,10 +16,10 @@ define(['passes/relax', 'parser/pegjs', 'utils'], function (relax, pegjs, utils)
       var east = pegjs.parse(grammar);
       var ast = pegjs.parse([
         "start = sentence+",
-        "sentence = prone [;] / &{return options.lax} _lax_sentence",
+        "sentence = prone [;] / _lax_sentence",
         "prone = [a-z]+",
-        "_lax_sentence = string:$[^;]* [;] {return {type: 'error', on: 'sentence', text: text(), offset: offset()}}"].join("\n"));
-      relax(east, {pegace: {relax: {sentence: "string:$[^;]* [;]"}}});
+        "_lax_sentence = &{return options.lax} $[^;]* [;] {return {type: 'error', on: 'sentence', text: text(), offset: offset()}}"].join("\n"));
+      relax(east, {pegace: {relax: {sentence: "$[^;]* [;]"}}});
       expect(east).toEqualProperties(ast);
     });
   });

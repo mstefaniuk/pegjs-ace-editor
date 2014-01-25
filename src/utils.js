@@ -188,8 +188,7 @@ define(function () {
         .replace(/\n/g, '\\n')   // line feed
         .replace(/\f/g, '\\f')   // form feed
         .replace(/\r/g, '\\r')   // carriage return
-        .replace(/[\x00-\x07\x0B\x0E-\x1F\x80-\uFFFF]/g, utils.escape)
-        + '"';
+        .replace(/[\x00-\x07\x0B\x0E-\x1F\x80-\uFFFF]/g, utils.escape) + '"';
     },
 
     /*
