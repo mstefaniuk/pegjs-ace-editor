@@ -6,12 +6,12 @@ define(['PEG', 'text!../../src/grammar/pegjs.pegjs', 'spec/ast/pegjs'],
   });
 
   describe("Browser generates PEG.js parser", function() {
-    it("should compile without error", function() {
+    xit("should compile without error", function() {
       expect(function(){PEG.buildParser(source, {output:'parser'})}).not.toThrow();
     });
-    it("generated parser should parse PEG.js grammar to the same AST", function() {
+    xit("generated parser should parse PEG.js grammar to the same AST", function() {
       var pegjs = PEG.buildParser(source, {output:'parser'});
-      expect(pegjs.parse(source)).toEqualProperties(vanilla);
+      expect(pegjs.parse(source)).toEqual(vanilla);
     });
   });
 });

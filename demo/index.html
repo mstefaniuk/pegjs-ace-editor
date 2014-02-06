@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+  <title>PEG editor</title>
+  <style>
+
+    body {
+      font-family: monospace;
+      font-size: 0.9em;
+      overflow: hidden;
+    }
+    #editor {
+      position: absolute;
+      top: 0;
+      bottom: 1.5em;
+      left: 0;
+      width: 40%;
+    }
+    #editor-bar {
+      padding: 0;
+      margin: 0;
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 40%;
+      height: 1.5em;
+    }
+    #graph {
+      top: 0;
+      left: 40%;
+      position: absolute;
+      right: 0;
+      bottom: 1.5em;
+      width: 60%;
+      overflow: auto;
+    }
+  </style>
+</head>
+<body>
+
+<div id="editor">/*
+  * Classic example grammar, which recognizes simple arithmetic expressions like
+  * "2*(3+4)". The parser generated from this grammar then computes their value.
+  */
+
+  start
+  = additive
+
+  additive
+  = left:multiplicative "+" right:additive { return left + right; }
+  / multiplicative
+
+  multiplicative
+  = left:primary "*" right:multiplicative { return left * right; }
+  / primary
+
+  primary
+  = integer
+  / "(" additive:additive ")" { return additive; }
+
+  integer "integer"
+  = digits:[0-9]+ { return parseInt(digits.join(""), 10); }
+}</div>
+<div id="editor-bar" class="ace_status-indicator"></div>
+<div id="graph"></div>
+
+<script src="../lib/requirejs/require.js"></script>
+<script>
+  require.config({
+    baseUrl: "../target",
+    paths: {
+      ace: '../lib/ace',
+      pegjs: '../lib/pegjs/peg-0.8.0.min'
+    },
+    shim: {
+      pegjs: {
+        exports: 'PEG'
+      }
+    }
+  });
+  require(["ace/ace", "ace/lib/lang", "ace/ext/statusbar"],
+      function (ace, lang, statusbar) {
+
+        var editor = ace.edit("editor");
+        editor.setTheme("ace/theme/eclipse");
+        editor.getSession().setMode("../../src/editor/mode/pegjs");
+        var StatusBar = ace.require('ace/ext/statusbar').StatusBar;
+        var statusBar = new StatusBar(editor, document.getElementById('editor-bar'));
+
+//        var update = lang.delayedCall(function() {
+//          var result = pegace.lint(editor.getValue());
+//          if (result.clean) {
+//            worker.postMessage(editor.getValue());
+//            editor.getSession().clearAnnotations();
+//          } else {
+//            var a = result.errors.map(function(e){
+//              var c = editor.getSession().getDocument().indexToPosition(e.pos);
+//              c.text = [messages[e.type], " '", e.string, "'."].join('');
+//              c.type = "error";
+//              return c;
+//            });
+//            editor.getSession().setAnnotations(a);
+//          }
+//        })
+//        editor.on("change", function () {update.delay(600)});
+      }
+  );
+</script>
+</body>

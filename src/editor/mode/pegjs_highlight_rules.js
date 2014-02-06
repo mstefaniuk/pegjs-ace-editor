@@ -11,7 +11,7 @@ define(function (require, exports, module) {
 
       'start': [
         {
-          token: 'constant.language',
+          token: 'identifier',
           regex: '[a-z][a-zA-Z]+'
         },
         {

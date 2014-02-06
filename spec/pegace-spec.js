@@ -62,11 +62,12 @@ define(['pegace', 'text!../../src/grammar/pegjs.pegjs'], function (pegace, pegra
       });
 
       it("should return list of suggestions", function() {
-        var grammar = ['aa = bb { my wife is so pleased',
+        var grammar = ['aa = bb',
           'bb = "bb"',
-          'cc = "cc"'];
+          'cc = "cc" { my wife is so pleased'];
 
-        grammar[1] = 'bb = ';
+        var expectations = epeg.suggest(grammar.join("\n"), grammar[0].length+5);
+        expect(expectations).toEqual(['aa','bb','cc']);
       });
     });
   });
