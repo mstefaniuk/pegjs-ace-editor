@@ -8,7 +8,7 @@ define(['PEG', 'passes/relax','utils'], function (PEG, relax, utils) {
 
   function makeVisitor(structure, visiting) {
     function factory(definition) {
-      if (definition.length==0) {
+      if (definition.length===0) {
         return visiting;
       } else {
         return function(node) {
@@ -20,14 +20,14 @@ define(['PEG', 'passes/relax','utils'], function (PEG, relax, utils) {
               visitor(node[d]);
             }
           });
-        }
+        };
       }
     }
     var functions = {};
     Object.keys(structure).map(function(e){
       functions[e] = factory(structure[e]);
     });
-    functions['error'] = factory([]);
+    functions.error = factory([]);
     var visitor = utils.buildNodeVisitor(functions);
     return visitor;
   }
@@ -40,6 +40,10 @@ define(['PEG', 'passes/relax','utils'], function (PEG, relax, utils) {
           plugins: [plugin],
           pegace: project.options
         });
+
+      // TODO: parse source to get PEG AST and then extract all editor rules
+      // above should be handled with another plugin triggered by editor option
+      // removing compilation steps and returning ACE mode
 
       function filterNodes(ast, nodes) {
         var result = [];
@@ -70,7 +74,7 @@ define(['PEG', 'passes/relax','utils'], function (PEG, relax, utils) {
           try {
             parser.parse(source.substr(0, cursor) + '%');
           } catch (e) {
-            if (e.offset == cursor) {
+            if (e.offset === cursor) {
               var ast = parser.parse(source, {
                 lax: true
               });
@@ -82,10 +86,13 @@ define(['PEG', 'passes/relax','utils'], function (PEG, relax, utils) {
                 }
               });
               return completions.map(function(k){
-                return k.name
+                return k.name;
               });
             }
           }
+        },
+        editor: function() {
+
         }
       };
     }

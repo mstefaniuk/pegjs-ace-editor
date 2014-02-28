@@ -137,16 +137,20 @@ suffixed
   / primary
 
 primary
-  = name:identifier !(string? equals) {
-      return {
-        type: "rule_ref",
-        name: name
-      };
-    }
+  = reference
   / literal
   / class
   / dot { return { type: "any" }; }
   / lparen expression:expression rparen { return expression; }
+
+reference "rule_ref"
+  = name:identifier !(string? equals) {
+    return {
+      type: "rule_ref",
+      name: name
+    };
+  }
+
 
 /* "Lexical" elements */
 

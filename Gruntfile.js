@@ -120,7 +120,7 @@ module.exports = function (grunt) {
 
   // Default task(s).
   grunt.registerTask('default', ['build']);
-  grunt.registerTask('build', ['clean:target', 'peg', 'copy', 'file_append']);
+  grunt.registerTask('build', ['clean:target', 'jshint', 'peg', 'copy', 'file_append']);
   grunt.registerTask('test', ['nodestatic:test', 'jasmine']);
   grunt.registerTask('check', ['jasmine']);
   grunt.registerTask('all', ['clean', "bower:install", 'peg', 'copy', 'file_append', 'test']);
